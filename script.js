@@ -4,7 +4,9 @@
 /////////////////////////////////////////////////
 // BankVia APP
 
-// Data
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////// DATA
 const account1 = {
   owner: 'Davut Simsek',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
@@ -35,7 +37,9 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
-// Elements
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////// ELEMENTS
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
 const labelBalance = document.querySelector('.balance__value');
@@ -60,99 +64,27 @@ const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
-
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////// LECTURES
+//////////////////////////////////////////////////////////////// DISPLAY MOVEMENTS FUNCTION
+const displayMovements = function (movements) {
+  // Using, innerHTML DOM>Element method, setting all HTML content
+  containerMovements.innerHTML = ``;
 
-// const currencies = new Map([
-//   ['USD', 'United States dollar'],
-//   ['EUR', 'Euro'],
-//   ['GBP', 'Pound sterling'],
-// ]);
+  // Using with forEach method, according to account movements, adding a html movement row
+  movements.forEach((mov, i) => {
+    const type = mov > 0 ? `deposit` : `withdrawal`;
+    const html = `
+    <div class="movements__row">
+      <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
+      <div class="movements__value">${mov}</div>
+    </div>`;
 
-// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-///////////////////////////////////////// SLICE METHOD returns new array
-
-// let arr = [`a`, `b`, `c`, `d`, `e`];
-
-// console.log(arr);
-// console.log(arr.slice(2));
-// console.log(arr.slice(2, 4));
-// console.log(arr.slice(-2));
-// console.log(arr.slice(1, -2));
-
-// // Shallow Copy (either with slice() or with (...) operator)
-// console.log(arr.slice());
-// console.log([...arr]);
-
-///////////////////////////////////////// SPLICE METHOD mutator, deletes array element
-// console.log(arr.splice(4)); // removes all elements starting 2nd index
-// console.log(arr);
-// arr.splice(1, 2); // starting from index 1st delete 2 elements
-// console.log(arr);
-// arr.splice(-1); // removes last element
-// console.log(arr);
-
-///////////////////////////////////////// REVERSE METHOD mutator, reverses array
-// const arr2 = [`e`, `d`, `c`, `b`, `a`];
-// console.log(arr2);
-// console.log(arr2.reverse());
-
-///////////////////////////////////////// CONCAT METHOD returns new array, joins arrays
-// const letters = arr.concat(arr2);
-// // console.log(...arr, ...arr2); // another way to join arrays with ... operator
-// console.log(letters);
-
-///////////////////////////////////////// JOIN METHOD returns new STRING, joins array elements
-// console.log(letters.join(` - `));
-
-///////////////////////////////////////// AT METHOD returns an element, shows the element at the index
-// const arr = [23, 11, 64];
-// console.log(arr[0]); // finding with [] bracket notation
-// console.log(arr.at(0));
-
-// // Traditional ways to get the last element
-// console.log(arr[arr.length - 1]);
-// console.log(arr.slice(-1)[0]);
-// // Modern way to get the last element
-// console.log(arr.at(-1));
-
-///////////////////////////////////////// FOR EACH METHOD loops the array
-// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-// // Looping with for of loop
-// for (const movement of movements) {
-//   if (movement > 0) {
-//     console.log(`You deposited ${movement}`);
-//   } else {
-//     console.log(`You withdrew ${Math.abs(movement)}`);
-//   }
-// }
-
-// // Looping with forEach method (Cons of forEach: doesnt have break or continue statement)
-// movements.forEach((mov, i, arr) => {
-//   if (mov > 0) {
-//     console.log(`Movement ${i + 1}: You deposited ${mov}`);
-//   } else {
-//     console.log(`Movement ${i + 1}: You withdrew ${Math.abs(mov)}`);
-//   }
-// });
-
-// forEach Method with MAPS
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
-
-currencies.forEach((value, key, map) => {
-  console.log(`${key}: ${value}`);
-});
-
-// forEach Method with SETS
-const currenciesUnique = new Set([`USD`, `GBP`, `USD`, `EUR`, `EUR`]);
-console.log(currenciesUnique);
-currenciesUnique.forEach((value, _, map) => {
-  console.log(`${value}: ${value}`);
-});
+    // Using, insertAdjacentHTML DOM>Element method, adding HTML content to parent
+    // Choosing `afterbegin` option adds any new row after the last one
+    containerMovements.insertAdjacentHTML(`afterbegin`, html);
+  });
+};
+displayMovements(account1.movements);
