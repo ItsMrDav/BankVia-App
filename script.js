@@ -66,7 +66,7 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////// DISPLAY MOVEMENTS FUNCTION
+////////////////////////////////////////////////////// DISPLAY MOVEMENTS FUNCTIONALITY
 const displayMovements = function (movements) {
   // Using, innerHTML DOM>Element method, setting all HTML content
   containerMovements.innerHTML = ``;
@@ -88,3 +88,34 @@ const displayMovements = function (movements) {
   });
 };
 displayMovements(account1.movements);
+
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// COMPUTING USER NAMES FUNCTIONALITY
+const createUserNames = function (accs) {
+  accs.forEach(acc => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(` `)
+      .map(name => name[0])
+      .join(``);
+  });
+};
+createUserNames(accounts);
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// DISPLAYING BALANCE FUNCTIONALITY
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} €`;
+};
+calcDisplayBalance(account1.movements);
+
+// // Using reduce method to get Maximum Value from an array
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// const maxMovement = movements.reduce((acc, mov) => {
+//   if (acc > mov) return acc;
+//   else return mov;
+// }, movements[0]);
+// console.log(movements);
+// console.log(maxMovement);
