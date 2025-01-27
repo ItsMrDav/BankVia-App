@@ -191,7 +191,24 @@ btnTransfer.addEventListener(`click`, function (e) {
     updateUI(currentAccount);
   }
 });
-
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// IMPLEMENT GETTING LOAN
+// Loan Button Event Handler
+btnLoan.addEventListener(`click`, function (e) {
+  e.preventDefault();
+  // Store loan amount
+  const amount = Number(inputLoanAmount.value);
+  // Check condition for loan
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    // Add loan movement
+    currentAccount.movements.push(amount);
+    // Update UI
+    updateUI(currentAccount);
+  }
+  // Clear loan input field
+  inputLoanAmount.value = ``;
+});
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////// IMPLEMENT CLOSE ACCOUNT
