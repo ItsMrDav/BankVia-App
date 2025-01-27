@@ -79,6 +79,17 @@ const createUserNames = function (accs) {
 createUserNames(accounts);
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// IMPLEMENT UPDATE UI
+const updateUI = function (acc) {
+  // Display movements
+  displayMovements(acc.movements);
+  // Calculate, display balance
+  calcDisplayBalance(acc);
+  // Calculate, display summary
+  calcDisplaySummary(acc);
+};
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////// IMPLEMENT DISPLAY MOVEMENTS
 const displayMovements = function (movements) {
   // Using, innerHTML DOM>Element method, setting all HTML content
@@ -103,9 +114,9 @@ const displayMovements = function (movements) {
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////// IMPLEMENT CALCULATING and DISPLAYING BALANCE
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} €`;
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance} €`;
 };
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -140,7 +151,6 @@ btnLogin.addEventListener(`click`, function (e) {
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
-  console.log(currentAccount);
   // check if pin is equal to current user's pin
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     // Display UI and welcome message
@@ -151,11 +161,55 @@ btnLogin.addEventListener(`click`, function (e) {
     // Clear user and pin input fields
     inputLoginUsername.value = inputLoginPin.value = ``;
     inputLoginPin.blur();
-    // Display movements
-    displayMovements(currentAccount.movements);
-    // Calculate, display balance
-    calcDisplayBalance(currentAccount.movements);
-    // Calculate, display summary
-    calcDisplaySummary(currentAccount);
+    // UPDATE UI
+    updateUI(currentAccount);
   }
+});
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// IMPLEMENT TRANSFERS
+// Transfor money button event handler
+btnTransfer.addEventListener(`click`, function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  // Clear transfer to and amount input fields
+  inputTransferTo.value = inputTransferAmount.value = ``;
+  // Check condition for transfering
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    // Doing the transfer
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+    // UPDATE UI
+    updateUI(currentAccount);
+  }
+});
+
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// IMPLEMENT CLOSE ACCOUNT
+// Close Account Button Event Handler
+btnClose.addEventListener(`click`, function (e) {
+  e.preventDefault();
+  // Check condition for deleting
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(acc => acc === currentAccount);
+    // Delete account
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+  // Clear close account name and pin input fields
+  inputCloseUsername.value = inputClosePin.value = ``;
 });
