@@ -91,12 +91,15 @@ const updateUI = function (acc) {
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////// IMPLEMENT DISPLAY MOVEMENTS
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   // Using, innerHTML DOM>Element method, setting all HTML content
   containerMovements.innerHTML = ``;
 
+  // Sorting movements logic
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
   // Using with forEach method, according to account movements, adding a html movement row
-  movements.forEach((mov, i) => {
+  movs.forEach((mov, i) => {
     const type = mov > 0 ? `deposit` : `withdrawal`;
     const html = `
     <div class="movements__row">
@@ -229,4 +232,14 @@ btnClose.addEventListener(`click`, function (e) {
   }
   // Clear close account name and pin input fields
   inputCloseUsername.value = inputClosePin.value = ``;
+});
+/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// IMPLEMENT MOVEMEMENT SORTING BUTTON
+let sorted = false;
+// Button Sort Event Handler
+btnSort.addEventListener(`click`, function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
