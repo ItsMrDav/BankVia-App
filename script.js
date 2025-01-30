@@ -140,16 +140,20 @@ const displayMovements = function (acc, sort = false) {
   // Using, innerHTML DOM>Element method, setting all HTML content
   containerMovements.innerHTML = ``;
 
-  // Sorting movements logic
-  const movs = sort
-    ? acc.movements.slice().sort((a, b) => a - b)
-    : acc.movements;
+  const combinedMovsDates = acc.movements.map((mov, i) => ({
+    movement: mov,
+    movementDate: acc.movementsDates[i],
+  }));
+  console.log(combinedMovsDates);
+
+  if (sort) combinedMovsDates.sort((a, b) => a.movement - b.movement);
 
   // Using with forEach method, according to account movements, adding a html movement row
-  movs.forEach((mov, i) => {
-    const type = mov > 0 ? `deposit` : `withdrawal`;
+  combinedMovsDates.forEach((obj, i) => {
+    const { movement, movementDate } = obj;
+    const type = movement > 0 ? `deposit` : `withdrawal`;
 
-    const date = new Date(acc.movementsDates[i]);
+    const date = new Date(movementDate);
 
     const day = date.getDate();
     const month = date.getMonth();
@@ -163,7 +167,7 @@ const displayMovements = function (acc, sort = false) {
       i + 1
     }. ${type}</div>
       <div class="movements__date">${displayDate}</div>
-      <div class="movements__value">${mov.toFixed(2)} €</div>
+      <div class="movements__value">${movement.toFixed(2)} €</div>
     </div>`;
 
     // Using, insertAdjacentHTML DOM>Element method, adding HTML content to parent
